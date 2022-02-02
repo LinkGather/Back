@@ -64,7 +64,13 @@ export class PostRepository extends AbstractRepository<Post> {
       .getMany();
   }
   findMyPost(user: number) {
-    return this.repository.find({ where: { user } });
+    return this.repository
+      .createQueryBuilder('posts')
+      .leftJoinAndSelect('posts.dibs', 'dibs', 'dibs.userId=:user', { user })
+      .leftJoinAndSelect('posts.likes', 'likes', 'likes.userId=:user', { user })
+      .orderBy('posts.id', 'DESC')
+      .where({ user })
+      .getMany();
   }
   findAllSortLike(user: number) {
     return this.repository
