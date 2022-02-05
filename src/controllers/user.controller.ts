@@ -9,6 +9,7 @@ import { generateToken } from '../utils/tokenGenerator';
 import { User } from '../entity/user.entity';
 import { validateEmail } from '../utils/emailValidator';
 import { validatePw, validatePwCheck } from '../utils/pwCheck';
+import { signup } from '../interfaces/user.interface';
 
 class userController {
   public signUp = async (req: Request, res: Response, next: NextFunction) => {
@@ -74,7 +75,7 @@ class userController {
       { session: false, failureRedirect: '/' },
       (err, user: User) => {
         const token = generateToken(user.id);
-        res.redirect(`http://localhost:3000/social/token=${token}`);
+        res.redirect(`http://linkgather.co.kr/social/token=${token}`);
       }
     )(req, res, next);
   };

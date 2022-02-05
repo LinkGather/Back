@@ -5,17 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --detectOpenHandles --forceExit",
-    "start": "tsc-watch --onSuccess \"ts-node dist/server.js\""
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/airbnb-migration/airbnb-back.git"
+    "start": "tsc-watch --onSuccess \"ts-node dist/server.js\"",
+    "run":"pm2 start dist/server.js"
   },
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/airbnb-migration/airbnb-back/issues"
-  },
   "jest": {
     "transform": {
       "^.+\\.ts$": "ts-jest"
@@ -33,7 +27,6 @@
       }
     }
   },
-  "homepage": "https://github.com/airbnb-migration/airbnb-back#readme",
   "dependencies": {
     "@ecubelabs/tsconfig": "^0.5.0",
     "axios": "^0.24.0",

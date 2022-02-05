@@ -1,9 +1,9 @@
-interface user {
+export interface user {
   email: string;
   name: string;
   password: string;
 }
 
-interface signup extends user {
+export interface signup extends user {
   passwordCheck: string;
 }

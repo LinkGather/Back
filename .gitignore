@@ -16,6 +16,7 @@ dist
 
 # dotenv environment variables file
 .env
+ecosystem.config.js
 
 #database config
 ormconfig.json

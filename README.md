@@ -1,6 +1,6 @@
 # LinkGather
 
-- 주소: 
+- 주소: https://www.linkgather.com
   
 ![linkgather](https://user-images.githubusercontent.com/86486778/148679216-0d895bca-7499-4c67-9a80-93e295d7650c.png)
 
@@ -19,7 +19,7 @@
 ## 사용 기술
 
 - Frontend
-  -React
+  - React
 
 - Backend
   - express

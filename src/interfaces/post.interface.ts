@@ -1,4 +1,4 @@
-interface postInput {
+export interface postInput {
   url: string;
   title: string;
   description: string;

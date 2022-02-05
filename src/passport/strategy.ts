@@ -49,6 +49,7 @@ export const passportStrategy = () => {
       async (jwtPayload, done) => {
         try {
           console.log('jwt strategy');
+          console.log(jwtPayload);
           const userRepository = getCustomRepository(UserRepository);
           const user = await userRepository.findOneById(jwtPayload.id);
           return done(null, user);

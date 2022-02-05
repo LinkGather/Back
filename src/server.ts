@@ -1,7 +1,7 @@
 import * as express from 'express';
 import Server from './app';
 import 'dotenv/config';
-const port = +process.env.PORT;
+const port = Number(process?.env?.PORT);
 
 const app: express.Application = Server.getInstance();
 

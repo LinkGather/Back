@@ -5,6 +5,7 @@ import { PostRepository } from '../entity/repository/post.repository';
 import { LikeRepository } from '../entity/repository/like.repository';
 import { DibRepository } from '../entity/repository/dib.repository';
 import { crawling } from '../utils/crawling';
+import { postInput } from '../interfaces/post.interface';
 
 class postController {
   //게시글 뷰
