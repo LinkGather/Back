@@ -57,11 +57,11 @@ jobs: # Job 설정
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Upload to S3 # Upload build file to S3
-        run: aws s3 cp ./back.zip s3://${{ secrets.DEV_AWS_S3_BUCKET }}/ 
+        run: aws s3 cp ./back.zip s3://${{ secrets.DEV_AWS_S3_BUCKET }}/public/ --recursion 
         
       - name: Deploy # Deploy to EC2
         run: aws deploy create-deployment
           --application-name LinkGahter-Bakc-deploy
           --deployment-config-name CodeDeployDefault.AllAtOnce
           --deployment-group-name LinkGather-deploy-pipe
-          --s3-location bucket=linkgather-back,key=*.zip,bundleType=zip
+          --s3-location bucket=linkgather-back, key=public/back.zip, bundleType=zip
