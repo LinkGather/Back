@@ -1,31 +1,22 @@
-name: Back
-
-# Controls when the workflow will run
-on:
-  # Triggers the workflow on push or pull request events but only for the main branch
+name: Deploy # Workflow 이름
+on: # Event 감지
   push:
-    branches: [ main ]
+    branches:
+      - main
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
-jobs:
-  # This workflow contains a single job called "build"
+jobs: # Job 설정
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-18.04
     strategy:
       matrix:
         node-version: [16.x]
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Checkout source code
-      - uses: actions/checkout@v2
+      - name: Checkout source code. # Repo checkout
+        uses: actions/checkout@v2
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
@@ -36,12 +27,41 @@ jobs:
         working-directory: ./server
         run: |
           touch .env
-          cat << EPF >> .env
+          cat << EOF >> .env
           ${{ secrets.ENV }}
 
-      - name: npm install
-        - run: npm install
-      
-      - name: npm test
-        - run: npm test
-      
+      - name: Cache node modules # node modules 캐싱
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-
+
+      - name: Install Dependencies # 의존 파일 설치
+        run: npm install
+
+      - name: run test # 테스트코드 실행
+        run: npm test
+
+      - name: zip create 
+        run: zip -qq -r back.zip ./
+        shell: bash
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.SECRET_KEY }}
+          aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Upload to S3 # Upload build file to S3
+        run: aws s3 sync ./back.zip s3://${{ secrets.DEV_AWS_S3_BUCKET }}/ --delete
+        
+      - name: Deploy # Deploy to EC2
+        run: aws deploy create-deployment
+          --application-name LinkGahter-Bakc-deploy
+          --deployment-config-name CodeDeployDefault.AllAtOnce
+          --deployment-group-name LinkGather-deploy-pipe
+          --s3-location bucket=linkgather-back,key=/*.zip,bundleType=zip
