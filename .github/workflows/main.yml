@@ -29,6 +29,13 @@ jobs: # Job 설정
           touch .env
           cat << EOF >> .env
           ${{ secrets.ENV }}
+      
+      - name: create ormconfig
+        working-directory: ./
+        run: |
+          touch ormconfig.jon
+          cat << EOF >> ormconfig.jon
+          ${{ secrets.ORMCONFIG }}
 
       - name: Cache node modules # node modules 캐싱
         uses: actions/cache@v1
