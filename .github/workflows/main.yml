@@ -33,8 +33,8 @@ jobs: # Job 설정
       - name: create ormconfig
         working-directory: ./
         run: |
-          touch ormconfig.jon
-          cat << EOF >> ormconfig.jon
+          touch ormconfig.json
+          cat << EOF >> ormconfig.json
           ${{ secrets.ORMCONFIG }}
 
       - name: Cache node modules # node modules 캐싱
