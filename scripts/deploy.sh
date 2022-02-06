@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-REPOSITORY = /home/ubuntu/linkgather/Back/
-cd $REPOSITORY
+cd /home/ubuntu/linkgather/Back/
 
 sudo pm2 start ecosystem.config.js
