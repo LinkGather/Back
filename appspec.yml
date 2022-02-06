@@ -9,5 +9,3 @@ hooks:
     - location: /scripts/beforeInstall.sh
   AfterInstall:
     - location: /scripts/deploy.sh
-      timeout: 60
-      runas: root
