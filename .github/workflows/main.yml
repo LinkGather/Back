@@ -64,4 +64,4 @@ jobs: # Job 설정
           --application-name LinkGahter-Bakc-deploy
           --deployment-config-name CodeDeployDefault.AllAtOnce
           --deployment-group-name LinkGather-deploy-pipe
-          --s3-location bucket=linkgather-back, key=public/back.zip, bundleType=zip
+          --s3-location bucket=linkgather-back,key=public/back.zip,bundleType=zip
