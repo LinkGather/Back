@@ -2,4 +2,5 @@
 
 cd /home/ubuntu/linkgather/Back/
 
+sudo pm2 kill
 sudo pm2 start ecosystem.config.js
