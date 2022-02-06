@@ -24,7 +24,7 @@ jobs: # Job 설정
           node-version: ${{ matrix.node-version }}
 
       - name: create env file
-        working-directory: ./server
+        working-directory: ./
         run: |
           touch .env
           cat << EOF >> .env
