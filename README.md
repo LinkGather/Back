@@ -26,4 +26,6 @@
   - express
   - Typescript
 
-
+- Todo
+  - koa로 프레임 워크 바꾸기
+  - DDD
