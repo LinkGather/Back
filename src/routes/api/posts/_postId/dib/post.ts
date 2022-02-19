@@ -2,7 +2,7 @@ import { Spec } from 'koa-joi-router';
 import { getDibRepository } from '../../../../../entity/repository/dib.repository';
 
 export default {
-  path: 'api/posts/:postId/dib',
+  path: '/api/posts/:postId/dib',
   method: 'post',
   handler: async (ctx) => {
     const { postId } = ctx.params;

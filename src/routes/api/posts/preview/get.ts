@@ -2,7 +2,7 @@ import { Spec } from 'koa-joi-router';
 import { crawling } from '../../../../utils/crawling';
 
 export default {
-  path: 'api/posts/preview',
+  path: '/api/posts/preview',
   method: 'get',
   handler: async (ctx) => {
     const { url } = ctx.request.body;

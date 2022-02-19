@@ -43,17 +43,17 @@ export class PostRepository extends AbstractRepository<Post> {
   }
 
   async updateLikeNum(id: number, likeNum: number) {
-    const post = await this.repository.findOne({ id });
+    const post = await this.repository.findOneOrFail({ id });
     post.likeNum = likeNum;
     return this.manager.save(post);
   }
 
   //찾기
   findByUserAndId(user: number, id: number) {
-    return this.repository.findOne({ user, id });
+    return this.repository.findOneOrFail({ user, id });
   }
   findById(id: number) {
-    return this.repository.findOne({ id });
+    return this.repository.findOneOrFail({ id });
   }
   findAll(user: number) {
     return this.repository

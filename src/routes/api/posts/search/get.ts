@@ -2,7 +2,7 @@ import { Spec } from 'koa-joi-router';
 import { getPostRepository } from '../../../../entity/repository/post.repository';
 
 export default {
-  path: 'api/posts/search',
+  path: '/api/posts/search',
   method: 'get',
   handler: async (ctx) => {
     const words = ctx.request.query.words as string;

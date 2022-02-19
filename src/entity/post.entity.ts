@@ -14,58 +14,58 @@ import { User } from './user.entity';
 @Entity('posts')
 export class Post {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Index({ fulltext: true })
   @Column({
     nullable: false,
     type: 'varchar',
   })
-  title: string;
+  title!: string;
 
   @Index({ fulltext: true })
   @Column({
     nullable: false,
     type: 'text',
   })
-  description: string;
+  description!: string;
 
   @Column({
     nullable: false,
   })
-  image: string;
+  image!: string;
 
   @Column({
     nullable: false,
   })
-  url: string;
+  url!: string;
 
   @Column({
     nullable: false,
   })
-  uploadTime: string;
+  uploadTime!: string;
 
   @Column({
     nullable: true,
     default: 0,
   })
-  likeNum: number;
+  likeNum!: number;
 
   @ManyToOne((type) => User, (users) => users.posts, {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  user: number | User;
+  user!: number | User;
 
   @OneToMany((type) => Like, (likes) => likes.post, {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  likes: Like[];
+  likes!: Like[];
 
   @OneToMany((type) => Dib, (dibs) => dibs.post, {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  dibs: Dib[];
+  dibs!: Dib[];
 }

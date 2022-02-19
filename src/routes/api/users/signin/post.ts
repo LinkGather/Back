@@ -1,9 +1,9 @@
 import { Spec } from 'koa-joi-router';
 import * as passport from 'koa-passport';
-import { generateToken } from 'utils/tokenGenerator';
+import { generateToken } from '../../../../utils/tokenGenerator';
 
 export default {
-  path: 'users/signin',
+  path: '/api/users/signin',
   method: 'post',
   handler: async (ctx) => {
     passport.authenticate('local', { session: false }, (err, user) => {

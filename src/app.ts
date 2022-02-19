@@ -67,13 +67,16 @@ import dbConnect from './entity';
 import * as Compress from 'koa-compress';
 import * as cors from '@koa/cors';
 import * as bodyParser from 'koa-body';
-import { errorHandlerMiddleware } from 'middlewares/errorHandler';
+import * as Logger from 'koa-logger';
+import { errorHandlerMiddleware } from './middlewares/errorHandler';
 import { publicRouter } from './routes/api';
 
 const app = new Koa();
 
 dbConnect.connection();
 
+app.use(Logger());
+app.use(Compress());
 app.use(cors({ origin: process.env.ORIGIN }));
 app.use(errorHandlerMiddleware);
 app.use(bodyParser());

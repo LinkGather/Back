@@ -3,7 +3,7 @@ import { getLikeRepository } from '../../../../../entity/repository/like.reposit
 import { getPostRepository } from '../../../../../entity/repository/post.repository';
 
 export default {
-  path: 'api/posts/:postId/likes',
+  path: '/api/posts/:postId/likes',
   method: 'post',
   handler: async (ctx) => {
     const { postId } = ctx.params;

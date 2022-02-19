@@ -1,12 +1,12 @@
 import { getUserRepository } from '../../../../entity/repository/user.repository';
 import { Spec } from 'koa-joi-router';
 import { validateEmail } from '../../../../utils/emailValidator';
-import { validatePw, validatePwCheck } from 'utils/pwCheck';
+import { validatePw, validatePwCheck } from '../../../../utils/pwCheck';
 import * as bcrypt from 'bcrypt';
 const salt = Number(process.env.SALT);
 
 export default {
-  path: 'api/users/signup',
+  path: '/api/users/signup',
   method: 'post',
   handler: async (ctx) => {
     const { email, name, password, passwordCheck } = ctx.request.body;

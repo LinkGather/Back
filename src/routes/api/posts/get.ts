@@ -1,13 +1,13 @@
+import { getPostRepository } from '../../../entity/repository/post.repository';
 import { Spec } from 'koa-joi-router';
-import { getPostRepository } from '../../../../entity/repository/post.repository';
 
 export default {
-  path: '/api/posts/sort',
+  path: '/api/posts',
   method: 'get',
   handler: async (ctx) => {
     const user = 1;
     const postRepository = getPostRepository();
-    const posts = postRepository.findAllSortLike(user);
+    const posts = await postRepository.findAll(user);
     return (ctx.body = {
       data: {
         success: true,
