@@ -6,45 +6,45 @@ import { Post } from './post.entity';
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({
     nullable: false,
     unique: true,
   })
-  email: string;
+  email!: string;
 
   @Column({
     nullable: false,
   })
-  name: string;
+  name!: string;
 
   @Column({
     nullable: false,
   })
-  password: string;
+  password!: string;
 
   @Column({
     nullable: true,
     default: null,
   })
-  provider: string;
+  provider?: string;
 
   @OneToMany((type) => Post, (posts) => posts.user, {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  posts: Post[];
+  posts!: Post[];
 
   @OneToMany((type) => Like, (likes) => likes.user, {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  likes: Like[];
+  likes!: Like[];
 
   @OneToMany((type) => Dib, (dibs) => dibs.user, {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  dibs: Dib[];
+  dibs!: Dib[];
 }

@@ -1,4 +1,8 @@
-import { EntityRepository, AbstractRepository } from 'typeorm';
+import {
+  EntityRepository,
+  AbstractRepository,
+  getCustomRepository,
+} from 'typeorm';
 import { Like } from '../like.entity';
 
 @EntityRepository(Like)
@@ -22,3 +26,7 @@ export class LikeRepository extends AbstractRepository<Like> {
     return this.repository.count({ post });
   }
 }
+
+export const getLikeRepository = () => {
+  return getCustomRepository(LikeRepository);
+};

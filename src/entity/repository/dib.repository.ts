@@ -1,4 +1,8 @@
-import { EntityRepository, AbstractRepository } from 'typeorm';
+import {
+  EntityRepository,
+  AbstractRepository,
+  getCustomRepository,
+} from 'typeorm';
 import { Dib } from '../dib.entity';
 
 @EntityRepository(Dib)
@@ -18,3 +22,7 @@ export class DibRepository extends AbstractRepository<Dib> {
     return this.repository.delete({ id });
   }
 }
+
+export const getDibRepository = () => {
+  return getCustomRepository(DibRepository);
+};

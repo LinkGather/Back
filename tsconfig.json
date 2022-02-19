@@ -1,17 +1,12 @@
 {
-  "compilerOptions": {
-    "target": "ES2021",
-    "skipLibCheck": true,
-    "module": "commonjs",
-    "strict":true,
-    "strictNullChecks": false,
-    "esModuleInterop": false,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "resolveJsonModule": true,
-    "outDir": "dist",
-    "rootDir": "./src"
-  },
-  "include": ["src/**/*", "src/__test__"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules"],
+  "extends": "@ecubelabs/tsconfig/node16.json",
+  "compilerOptions": {
+      "typeRoots": ["./node_modules/@types", "src/@types"],
+      "strict": true,
+      "baseUrl": "src",
+      "outDir": "dist",
+      "useUnknownInCatchVariables": false
+  }
 }

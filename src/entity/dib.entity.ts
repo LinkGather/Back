@@ -5,17 +5,17 @@ import { User } from './user.entity';
 @Entity('dibs')
 export class Dib {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @ManyToOne((type) => User, (users) => users.dibs, {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  user: number | User;
+  user!: number | User;
 
   @ManyToOne((type) => Post, (posts) => posts.dibs, {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  post: number | Post;
+  post!: number | Post;
 }
