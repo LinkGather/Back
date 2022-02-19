@@ -1,4 +1,8 @@
-import { EntityRepository, AbstractRepository } from 'typeorm';
+import {
+  EntityRepository,
+  AbstractRepository,
+  getCustomRepository,
+} from 'typeorm';
 import { User } from '../user.entity';
 
 @EntityRepository(User)
@@ -21,7 +25,7 @@ export class UserRepository extends AbstractRepository<User> {
   }
 
   findOneByEmail(email: string) {
-    return this.repository.findOne({ email });
+    return this.repository.findOneOrFail({ email });
   }
   findOneById(id: number) {
     return this.repository.findOne({ id });
@@ -30,3 +34,7 @@ export class UserRepository extends AbstractRepository<User> {
     return this.repository.findOne({ email, provider: 'kakao' });
   }
 }
+
+export const getUserRepository = () => {
+  return getCustomRepository(UserRepository);
+};

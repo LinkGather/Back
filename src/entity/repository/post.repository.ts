@@ -1,7 +1,7 @@
 import {
   EntityRepository,
   AbstractRepository,
-  SelectQueryBuilder,
+  getCustomRepository,
 } from 'typeorm';
 import { Post } from '../post.entity';
 
@@ -108,3 +108,7 @@ export class PostRepository extends AbstractRepository<Post> {
     return this.repository.delete({ id });
   }
 }
+
+export const getPostRepository = () => {
+  return getCustomRepository(PostRepository);
+};
