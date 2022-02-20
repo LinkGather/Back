@@ -14,7 +14,8 @@
 
 > 공부하는데 필요한 링크들을 모아서 올릴 수 있는 사이트.
 >
-> 기존에 했던 프로젝트를 react와 express를 이용하여 다시만듬.
+> ver 1.0 서버 언어 변경 (python => javascript)
+> ver 2.0 서버 프레임워크 변경 (express => koa)
 
 ## 사용 기술
 
@@ -23,9 +24,5 @@
   - Typescript
 
 - Backend
-  - express
+  - koa
   - Typescript
-
-- Todo
-  - koa로 프레임 워크 바꾸기
-  - DDD
