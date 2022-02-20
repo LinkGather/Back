@@ -18,7 +18,7 @@ export const auth = async (ctx: Context, next: Next) => {
 
 export const authForGuest = async (ctx: Context, next: Next) => {
   const token = ctx.request.header.authorization;
-  if (token) {
+  if (token && token !== 'null') {
     const { id } = jwt.verify(
       token,
       process.env.SECRET as string
