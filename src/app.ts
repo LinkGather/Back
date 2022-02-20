@@ -23,7 +23,7 @@ passportStrategy();
 //middleware
 app.use(Logger());
 app.use(Compress());
-app.use(cors({ origin: process.env.ORIGIN }));
+app.use(cors({ origin: 'https://linkgather.co.kr' }));
 app.use(bodyParser());
 app.use(publicRouter.middleware());
 
