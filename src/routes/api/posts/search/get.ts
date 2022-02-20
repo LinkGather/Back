@@ -1,5 +1,5 @@
 import { Spec } from 'koa-joi-router';
-import { getPostRepository } from '../../../../entity/repository/post.repository';
+import PostService from '../../../../services/posts/application/service';
 
 export default {
   path: '/api/posts/search',
@@ -7,9 +7,8 @@ export default {
   handler: async (ctx) => {
     const words = ctx.request.query.words as string;
     const user = 1;
-    const postRepository = getPostRepository();
     if (words) {
-      const posts = await postRepository.search(words, user);
+      const posts = await PostService.search(words, user);
       return (ctx.body = {
         data: {
           success: true,
@@ -17,7 +16,7 @@ export default {
         },
       });
     } else {
-      const posts = await postRepository.randomSearch();
+      const posts = await PostService.randomSearch();
       return (ctx.body = {
         data: {
           success: true,
