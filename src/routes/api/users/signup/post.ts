@@ -1,9 +1,7 @@
-import { getUserRepository } from '../../../../entity/repository/user.repository';
 import { Spec } from 'koa-joi-router';
-import { validateEmail } from '../../../../utils/emailValidator';
-import { validatePw, validatePwCheck } from '../../../../utils/pwCheck';
-import * as bcrypt from 'bcrypt';
-const salt = Number(process.env.SALT);
+import { validateEmail } from '../../../../lib/utils/emailValidator';
+import { validatePw, validatePwCheck } from '../../../../lib/utils/pwCheck';
+import UserService from '../../../../services/users/application/service';
 
 export default {
   path: '/api/users/signup',
@@ -16,8 +14,7 @@ export default {
         data: { success: false, msg: '이메일을 확인해주세요' },
       });
     }
-    const userRepository = getUserRepository();
-    const exEmail = await userRepository.findOneByEmail(email);
+    const exEmail = await UserService.dupCheck(email);
     if (!exEmail) {
       if (!validatePwCheck(password, passwordCheck)) {
         ctx.status = 400;
@@ -37,7 +34,7 @@ export default {
           },
         });
       }
-      const hashedPw = bcrypt.hashSync(password, salt);
+      await UserService.signup(email, name, password);
       return (ctx.body = {
         data: {
           success: true,

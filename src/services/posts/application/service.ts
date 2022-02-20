@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import { crawling } from '../../../utils/crawling';
+import { crawling } from '../../../lib/utils/crawling';
 import {
   getDibRepository,
   getLikeRepository,

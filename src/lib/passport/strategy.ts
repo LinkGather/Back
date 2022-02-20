@@ -1,7 +1,7 @@
 import * as passport from 'koa-passport';
 import { Strategy } from 'passport-local';
 import * as bcrypt from 'bcrypt';
-import { getUserRepository } from '../entity/repository/user.repository';
+import UserService from '../../services/users/application/service';
 import * as passportJWT from 'passport-jwt';
 import * as kakao from 'passport-kakao';
 import 'dotenv/config';
@@ -21,8 +21,7 @@ export const passportStrategy = () => {
       async (email, password, done) => {
         try {
           console.log('local strategy');
-          const userRepository = getUserRepository();
-          const exUser = await userRepository.findOneByEmail(email);
+          const exUser = await UserService.dupCheck(email);
           const validatePw = await bcrypt.compare(password, exUser.password);
           if (exUser && validatePw) {
             done(null, exUser);
@@ -40,21 +39,16 @@ export const passportStrategy = () => {
   );
   //jwt Strategy
   passport.use(
+    'jwt',
     new jwtStrategy(
       {
         jwtFromRequest: passportJWT.ExtractJwt.fromHeader('authorization'),
         secretOrKey: process.env.SECRET,
       },
       async (jwtPayload, done) => {
-        try {
-          console.log('jwt strategy');
-          console.log(jwtPayload);
-          const userRepository = getUserRepository();
-          const user = await userRepository.findOneById(jwtPayload.id);
-          return done(null, user);
-        } catch (err) {
-          return done(err);
-        }
+        console.log('jwt strategy');
+        const user = await UserService.retrieve(jwtPayload.id);
+        return done(null, user);
       }
     )
   );
@@ -69,12 +63,11 @@ export const passportStrategy = () => {
         console.log('kakao strategy');
         const name = profile.username as string;
         const email = profile._json.kakao_account.email;
-        const userRepository = getUserRepository();
-        const exUser = await userRepository.findOneByKakao(email);
+        const exUser = await UserService.dupCheck(email);
         if (exUser) {
           done(null, exUser);
         } else {
-          const user = await userRepository.kakaoSave(email, name, profile.id);
+          const user = await UserService.kakaoSignup(email, name, profile);
           done(null, user);
         }
       }

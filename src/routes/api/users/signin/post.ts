@@ -1,6 +1,6 @@
 import { Spec } from 'koa-joi-router';
 import * as passport from 'koa-passport';
-import { generateToken } from '../../../../utils/tokenGenerator';
+import { generateToken } from '../../../../lib/utils/tokenGenerator';
 
 export default {
   path: '/api/users/signin',
