@@ -7,13 +7,11 @@ export default {
   method: 'get',
   pre: auth,
   handler: async (ctx) => {
-    const user = 1;
+    const { user } = ctx.request.body;
     const posts = await PostService.myPage(user);
     return (ctx.body = {
-      data: {
-        success: true,
-        posts,
-      },
+      success: true,
+      posts,
     });
   },
 } as Spec;

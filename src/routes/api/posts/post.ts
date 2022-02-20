@@ -7,13 +7,10 @@ export default {
   method: 'post',
   pre: auth,
   handler: async (ctx) => {
-    const { url, title, description } = ctx.request.body;
-    const user = 1;
+    const { url, title, description, user } = ctx.request.body;
     await PostService.submitPost(url, title, description, user);
     return (ctx.body = {
-      data: {
-        success: true,
-      },
+      success: true,
     });
   },
 } as Spec;

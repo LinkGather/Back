@@ -10,10 +10,8 @@ export default {
     const { user } = ctx.request.body;
     const posts = await PostService.getPostList(user);
     return (ctx.body = {
-      data: {
-        success: true,
-        posts,
-      },
+      success: true,
+      posts,
     });
   },
 } as Spec;

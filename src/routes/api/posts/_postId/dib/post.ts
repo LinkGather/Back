@@ -8,18 +8,20 @@ export default {
   pre: auth,
   handler: async (ctx) => {
     const { postId } = ctx.params;
-    const user: number = 1;
+    const { user } = ctx.request.body;
     const dibExist = await PostService.isDib(user, Number(postId));
     if (dibExist) {
       const dibId = dibExist.id;
       await PostService.cancelDib(dibId);
       return (ctx.body = {
-        data: { success: true, msg: '찜하기 취소' },
+        success: true,
+        msg: '찜하기 취소',
       });
     } else {
       await PostService.dib(user, postId);
       return (ctx.body = {
-        data: { success: true, msg: '찜하기 성공' },
+        success: true,
+        msg: '찜하기 성공',
       });
     }
   },

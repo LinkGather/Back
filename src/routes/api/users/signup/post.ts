@@ -11,7 +11,8 @@ export default {
     if (!validateEmail(email)) {
       ctx.status = 400;
       return (ctx.body = {
-        data: { success: false, msg: '이메일을 확인해주세요' },
+        success: false,
+        msg: '이메일을 확인해주세요',
       });
     }
     const exEmail = await UserService.dupCheck(email);
@@ -19,26 +20,20 @@ export default {
       if (!validatePwCheck(password, passwordCheck)) {
         ctx.status = 400;
         return (ctx.body = {
-          data: {
-            success: false,
-            msg: '비밀번호 체크란을 확인해주세요',
-          },
+          success: false,
+          msg: '비밀번호 체크란을 확인해주세요',
         });
       }
       if (!validatePw(password)) {
         ctx.status = 400;
         return (ctx.body = {
-          data: {
-            success: false,
-            msg: '비밀번호를 확인해주세요',
-          },
+          success: false,
+          msg: '비밀번호를 확인해주세요',
         });
       }
       await UserService.signup(email, name, password);
       return (ctx.body = {
-        data: {
-          success: true,
-        },
+        success: true,
       });
     }
     ctx.status = 400;

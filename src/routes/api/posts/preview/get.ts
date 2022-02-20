@@ -10,10 +10,8 @@ export default {
     const { url } = ctx.request.body;
     const image = await PostService.preview(url);
     return (ctx.body = {
-      data: {
-        success: true,
-        image,
-      },
+      success: true,
+      image,
     });
   },
 } as Spec;

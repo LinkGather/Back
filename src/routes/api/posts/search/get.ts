@@ -8,22 +8,18 @@ export default {
   pre: authForGuest,
   handler: async (ctx) => {
     const words = ctx.request.query.words as string;
-    const user = 1;
+    const { user } = ctx.request.body;
     if (words) {
       const posts = await PostService.search(words, user);
       return (ctx.body = {
-        data: {
-          success: true,
-          posts,
-        },
+        success: true,
+        posts,
       });
     } else {
       const posts = await PostService.randomSearch();
       return (ctx.body = {
-        data: {
-          success: true,
-          posts,
-        },
+        success: true,
+        posts,
       });
     }
   },
