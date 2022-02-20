@@ -1,5 +1,5 @@
 import { Spec } from 'koa-joi-router';
-import { getDibRepository } from '../../../../../entity/repository/dib.repository';
+import PostService from '../../../../../services/posts/application/service';
 
 export default {
   path: '/api/posts/:postId/dib',
@@ -7,19 +7,15 @@ export default {
   handler: async (ctx) => {
     const { postId } = ctx.params;
     const user: number = 1;
-    const dibRepository = getDibRepository();
-    const dibExist = await dibRepository.findByUserAndPostId(
-      user,
-      Number(postId)
-    );
+    const dibExist = await PostService.isDib(user, Number(postId));
     if (dibExist) {
       const dibId = dibExist.id;
-      await dibRepository.deleteOne(dibId);
+      await PostService.cancelDib(dibId);
       return (ctx.body = {
         data: { success: true, msg: '찜하기 취소' },
       });
     } else {
-      await dibRepository.save(user, Number(postId));
+      await PostService.dib(user, postId);
       return (ctx.body = {
         data: { success: true, msg: '찜하기 성공' },
       });

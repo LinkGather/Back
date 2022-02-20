@@ -1,6 +1,5 @@
 import { Spec } from 'koa-joi-router';
-import { getLikeRepository } from '../../../../../entity/repository/like.repository';
-import { getPostRepository } from '../../../../../entity/repository/post.repository';
+import PostService from '../../../../../services/posts/application/service';
 
 export default {
   path: '/api/posts/:postId/likes',
@@ -8,17 +7,10 @@ export default {
   handler: async (ctx) => {
     const { postId } = ctx.params;
     const user = 1;
-    const likeRepository = getLikeRepository();
-    const postRepository = getPostRepository();
-    const likeExist = await likeRepository.findByUserAndPostId(
-      user,
-      Number(postId)
-    );
+    const likeExist = await PostService.isLike(user, Number(postId));
     if (likeExist) {
       const likeId = likeExist.id;
-      await likeRepository.deleteOne(likeId);
-      const likeNum = await likeRepository.countNum(Number(postId));
-      await postRepository.updateLikeNum(Number(postId), likeNum);
+      const likeNum = await PostService.cancelLike(likeId, Number(postId));
       return (ctx.body = {
         data: {
           success: true,
@@ -27,9 +19,7 @@ export default {
         },
       });
     } else {
-      await likeRepository.save(user, Number(postId));
-      const likeNum = await likeRepository.countNum(Number(postId));
-      await postRepository.updateLikeNum(Number(postId), likeNum);
+      const likeNum = await PostService.like(user, Number(postId));
       return (ctx.body = {
         data: {
           success: true,

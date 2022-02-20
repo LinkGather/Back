@@ -3,10 +3,10 @@ import {
   AbstractRepository,
   getCustomRepository,
 } from 'typeorm';
-import { Post } from '../domain/model';
+import { Like, Post, Dib } from '../domain/model';
 
 @EntityRepository(Post)
-export class PostRepository extends AbstractRepository<Post> {
+class PostRepository extends AbstractRepository<Post> {
   //생성
   save(
     url: string,
@@ -111,4 +111,52 @@ export class PostRepository extends AbstractRepository<Post> {
 
 export const getPostRepository = () => {
   return getCustomRepository(PostRepository);
+};
+
+@EntityRepository(Like)
+class LikeRepository extends AbstractRepository<Like> {
+  save(user: number, post: number) {
+    const like = new Like();
+    like.user = user;
+    like.post = post;
+    return this.manager.save(like);
+  }
+
+  findByUserAndPostId(user: number, post: number) {
+    return this.repository.findOneOrFail({ user, post });
+  }
+
+  deleteOne(id: number) {
+    return this.repository.delete({ id });
+  }
+
+  countNum(post: number) {
+    return this.repository.count({ post });
+  }
+}
+
+export const getLikeRepository = () => {
+  return getCustomRepository(LikeRepository);
+};
+
+@EntityRepository(Dib)
+class DibRepository extends AbstractRepository<Dib> {
+  save(user: number, post: number) {
+    const dib = new Dib();
+    dib.user = user;
+    dib.post = post;
+    return this.manager.save(dib);
+  }
+
+  findByUserAndPostId(user: number, post: number) {
+    return this.repository.findOne({ user, post });
+  }
+
+  deleteOne(id: number) {
+    return this.repository.delete({ id });
+  }
+}
+
+export const getDibRepository = () => {
+  return getCustomRepository(DibRepository);
 };

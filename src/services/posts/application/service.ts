@@ -1,8 +1,9 @@
 import * as moment from 'moment';
 import { crawling } from '../../../utils/crawling';
 import {
+  getDibRepository,
+  getLikeRepository,
   getPostRepository,
-  PostRepository,
 } from '../infrastructure/repository';
 
 class PostService {
@@ -65,6 +66,46 @@ class PostService {
   public myPage = async (user: number) => {
     const postRepository = getPostRepository();
     return await postRepository.findMyPost(user);
+  };
+
+  //좋아요
+  public isLike = async (user: number, postId: number) => {
+    const likeRepository = getLikeRepository();
+    return await likeRepository.findByUserAndPostId(user, postId);
+  };
+
+  public cancelLike = async (likeId: number, postId: number) => {
+    const likeRepository = getLikeRepository();
+    const postRepository = getPostRepository();
+    await likeRepository.deleteOne(likeId);
+    const likeNum = await likeRepository.countNum(postId);
+    await postRepository.updateLikeNum(postId, likeNum);
+    return likeNum;
+  };
+
+  public like = async (user: number, postId: number) => {
+    const likeRepository = getLikeRepository();
+    const postRepository = getPostRepository();
+    await likeRepository.save(user, postId);
+    const likeNum = await likeRepository.countNum(postId);
+    await postRepository.updateLikeNum(postId, likeNum);
+    return likeNum;
+  };
+
+  //찜
+  public isDib = async (user: number, postId: number) => {
+    const dibRepository = getDibRepository();
+    return await dibRepository.findByUserAndPostId(user, postId);
+  };
+
+  public cancelDib = async (dibId: number) => {
+    const dibRepository = getDibRepository();
+    await dibRepository.deleteOne(dibId);
+  };
+
+  public dib = async (user: number, postId: number) => {
+    const dibRepository = getDibRepository();
+    await dibRepository.save(user, postId);
   };
 }
 
