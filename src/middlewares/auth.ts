@@ -1,25 +1,20 @@
-import { Request, Response, NextFunction } from 'express';
-import * as passport from 'passport';
+import { Context, Next } from 'koa';
+import * as passport from 'koa-passport';
 
-export const auth = (req: Request, res: Response, next: NextFunction) => {
-  passport.authenticate('jwt', { session: false }, (err, user) => {
-    if (err) return next(err);
-    res.locals.user = user.id;
-    next();
-  })(req, res, next);
+export const auth = async (ctx: Context, next: Next) => {
+  passport.authenticate('jwt', { session: false }, async (err, user) => {
+    ctx.request.body.user = user.id;
+    return next();
+  })(ctx, next);
 };
 
-export const authForGuest = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const authForGuest = (ctx: Context, next: Next) => {
   passport.authenticate('jwt', { session: false }, (err, user) => {
     if (err) {
-      res.locals.user = 3;
-      next();
+      ctx.request.body.user = 3;
+      return next();
     }
-    res.locals.user = user.id;
-    next();
-  })(req, res, next);
+    ctx.request.body.user = user.id;
+    return next();
+  })(ctx, next);
 };

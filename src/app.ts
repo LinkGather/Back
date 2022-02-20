@@ -1,63 +1,30 @@
-import * as express from 'express';
-import dbConnect from './entity';
-import * as morgan from 'morgan';
-import * as helmet from 'helmet';
-import * as compression from 'compression';
-import * as passport from 'passport';
-import * as cors from 'cors';
-import Routers from './interfaces/router.interface';
-import indexRouter from './routes';
-import userRouter from './routes/user';
-import postRouter from './routes/post';
-import { errorHandler } from './middlewares/errorHandler';
-import { passportStrategy } from './passport/strategy';
-class Server {
-  public app: express.Application;
+import * as Koa from 'koa';
+import dbConnect from './config';
+import * as Compress from 'koa-compress';
+import * as cors from '@koa/cors';
+import * as bodyParser from 'koa-body';
+import * as Logger from 'koa-logger';
+import * as passport from 'koa-passport';
+import { errorHandlerMiddleware } from './middlewares/errorHandler';
+import { publicRouter } from './routes/api';
+import { passportStrategy } from './lib/passport/strategy';
 
-  constructor(routers: Routers[]) {
-    this.app = express();
-    this.connectDatabase();
-    this.passportAuth();
-    this.middleware();
-    this.initializeRouter(routers);
-    this.errorHandleMiddleware();
-  }
+const app = new Koa();
 
-  private connectDatabase() {
-    dbConnect.connection();
-  }
+dbConnect.connection();
 
-  private initializeRouter(routers: Routers[]) {
-    routers.forEach((router) => {
-      this.app.use('/', router.router);
-    });
-  }
+//error handler
+app.use(errorHandlerMiddleware);
 
-  public getInstance(): express.Application {
-    return this.app;
-  }
+//passport
+app.use(passport.initialize());
+passportStrategy();
 
-  private middleware() {
-    this.app.use(cors({ origin: true, credentials: true }));
-    this.app.use(morgan('dev'));
-    this.app.use(helmet());
-    this.app.use(compression());
-    this.app.use(express.urlencoded({ extended: false }));
-    this.app.use(express.json());
-  }
+//middleware
+app.use(Logger());
+app.use(Compress());
+app.use(cors({ origin: process.env.ORIGIN }));
+app.use(bodyParser());
+app.use(publicRouter.middleware());
 
-  private passportAuth() {
-    this.app.use(passport.initialize());
-    passportStrategy();
-  }
-
-  private errorHandleMiddleware() {
-    this.app.use(errorHandler);
-  }
-}
-
-export default new Server([
-  new indexRouter(),
-  new userRouter(),
-  new postRouter(),
-]);
+export default app;
