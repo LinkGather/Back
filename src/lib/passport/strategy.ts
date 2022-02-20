@@ -37,21 +37,6 @@ export const passportStrategy = () => {
       }
     )
   );
-  //jwt Strategy
-  passport.use(
-    'jwt',
-    new jwtStrategy(
-      {
-        jwtFromRequest: passportJWT.ExtractJwt.fromHeader('authorization'),
-        secretOrKey: process.env.SECRET,
-      },
-      async (jwtPayload, done) => {
-        console.log('jwt strategy');
-        const user = await UserService.retrieve(jwtPayload.id);
-        return done(null, user);
-      }
-    )
-  );
   passport.use(
     new KakaoStrategy(
       {
