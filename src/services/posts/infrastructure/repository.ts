@@ -50,7 +50,7 @@ class PostRepository extends AbstractRepository<Post> {
 
   //찾기
   findByUserAndId(user: number, id: number) {
-    return this.repository.findOneOrFail({ user, id });
+    return this.repository.findOne({ user, id });
   }
   findById(id: number) {
     return this.repository.findOneOrFail({ id });
@@ -123,7 +123,7 @@ class LikeRepository extends AbstractRepository<Like> {
   }
 
   findByUserAndPostId(user: number, post: number) {
-    return this.repository.findOneOrFail({ user, post });
+    return this.repository.findOne({ user, post });
   }
 
   deleteOne(id: number) {

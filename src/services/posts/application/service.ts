@@ -107,6 +107,44 @@ class PostService {
     const dibRepository = getDibRepository();
     await dibRepository.save(user, postId);
   };
+
+  public delete = async (user: number, postId: number) => {
+    const postRepository = getPostRepository();
+    const post = await postRepository.findByUserAndId(user, postId);
+    if (post) {
+      await postRepository.deleteOne(postId);
+      return true;
+    } else {
+      return false;
+    }
+  };
+  public update = async (
+    user: number,
+    postId: number,
+    url: string,
+    title: string,
+    description: string
+  ) => {
+    const postRepository = getPostRepository();
+    const post = await postRepository.findByUserAndId(user, postId);
+    if (post) {
+      let image = await crawling(url);
+      if (!image) {
+        image =
+          'https://user-images.githubusercontent.com/86486778/148679216-0d895bca-7499-4c67-9a80-93e295d7650c.png';
+      }
+      const newPost = await postRepository.updateOne(
+        url,
+        title,
+        description,
+        image,
+        postId
+      );
+      return newPost;
+    } else {
+      return false;
+    }
+  };
 }
 
 export default new PostService();

@@ -25,7 +25,7 @@ class UserRepository extends AbstractRepository<User> {
   }
 
   findOneByEmail(email: string) {
-    return this.repository.findOneOrFail({ email });
+    return this.repository.findOne({ email });
   }
   findOneById(id: number) {
     return this.repository.findOneOrFail({ id });
