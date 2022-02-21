@@ -1,4 +1,4 @@
 import { Spec } from 'koa-joi-router';
-import get from './get';
+import post from './post';
 
-export const previewRoutes: Spec[] = [get];
+export const previewRoutes: Spec[] = [post];
