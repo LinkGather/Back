@@ -30,11 +30,21 @@ export class User {
   })
   provider?: string;
 
-  @OneToMany((type) => Post, (posts) => posts.user, {
-    nullable: false,
-    onDelete: 'CASCADE',
-  })
-  posts!: Post[];
+  constructor(args: {
+    email: string;
+    name: string;
+    password: string;
+    provider?: string;
+  }) {
+    if (args) {
+      this.email = args.email;
+      this.name = args.name;
+      this.password = args.password;
+      if (args.provider) {
+        this.provider = args.provider;
+      }
+    }
+  }
 
   @OneToMany((type) => Like, (likes) => likes.user, {
     nullable: false,

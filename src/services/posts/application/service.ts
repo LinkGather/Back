@@ -1,5 +1,6 @@
 import * as moment from 'moment';
 import { crawling } from '../../../lib/utils/crawling';
+import { Post } from '../domain/model';
 import {
   getDibRepository,
   getLikeRepository,
@@ -10,7 +11,7 @@ class PostService {
   // 리스트 전체조회
   public getPostList = async (user: number) => {
     const postRepository = getPostRepository();
-    return await postRepository.findAll(user);
+    return await postRepository.find(user);
   };
 
   // 등록
@@ -18,7 +19,7 @@ class PostService {
     url: string,
     title: string,
     description: string,
-    user: number
+    userId: number
   ) => {
     const postRepository = getPostRepository();
     let image = await crawling(url);
@@ -26,15 +27,8 @@ class PostService {
       image =
         'https://user-images.githubusercontent.com/86486778/148642786-552a0da0-06e2-4a19-bf5c-17a28e184ded.png';
     }
-    const uploadTime = moment().format('YYYY-MM-DD');
-    return await postRepository.save(
-      url,
-      title,
-      description,
-      user,
-      image,
-      uploadTime
-    );
+    const post = new Post({ title, description, image, url, userId });
+    return await postRepository.save(post);
   };
 
   // 정렬
@@ -79,16 +73,20 @@ class PostService {
     const postRepository = getPostRepository();
     await likeRepository.deleteOne(likeId);
     const likeNum = await likeRepository.countNum(postId);
-    await postRepository.updateLikeNum(postId, likeNum);
+    const post = await postRepository.findById(postId);
+    post.update({ likeNum });
+    await postRepository.save(post);
     return likeNum;
   };
 
   public like = async (user: number, postId: number) => {
-    const likeRepository = getLikeRepository();
     const postRepository = getPostRepository();
-    await likeRepository.save(user, postId);
+    const likeRepository = getLikeRepository();
+    await postRepository.like(user, postId);
     const likeNum = await likeRepository.countNum(postId);
-    await postRepository.updateLikeNum(postId, likeNum);
+    const post = await postRepository.findById(postId);
+    post.update({ likeNum });
+    await postRepository.save(post);
     return likeNum;
   };
 
@@ -104,8 +102,8 @@ class PostService {
   };
 
   public dib = async (user: number, postId: number) => {
-    const dibRepository = getDibRepository();
-    await dibRepository.save(user, postId);
+    const postRepository = getPostRepository();
+    await postRepository.dib(user, postId);
   };
 
   public delete = async (user: number, postId: number) => {
@@ -133,14 +131,8 @@ class PostService {
         image =
           'https://user-images.githubusercontent.com/86486778/148679216-0d895bca-7499-4c67-9a80-93e295d7650c.png';
       }
-      const newPost = await postRepository.updateOne(
-        url,
-        title,
-        description,
-        image,
-        postId
-      );
-      return newPost;
+      post.update({ url, title, description, image });
+      return await postRepository.save(post);
     } else {
       return false;
     }

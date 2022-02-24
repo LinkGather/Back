@@ -1,6 +1,7 @@
+import { stripUndefined } from '../../../lib/common';
+import * as moment from 'moment';
 import {
   Entity,
-  BaseEntity,
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
@@ -9,6 +10,13 @@ import {
 } from 'typeorm';
 import { User } from '../../users/domain/model';
 
+type PostUpdateType = {
+  title?: string;
+  description?: string;
+  image?: string;
+  url?: string;
+  likeNum?: number;
+};
 @Entity('posts')
 export class Post {
   @PrimaryGeneratedColumn()
@@ -43,29 +51,58 @@ export class Post {
   })
   uploadTime!: string;
 
-  @Column({
-    nullable: true,
-    default: 0,
-  })
-  likeNum!: number;
+  @Column({})
+  likeNum?: number;
 
-  @ManyToOne((type) => User, (users) => users.posts, {
-    nullable: false,
-    onDelete: 'CASCADE',
-  })
-  user!: number | User;
+  @Column()
+  userId!: number;
+
+  constructor(args: {
+    title: string;
+    description: string;
+    image: string;
+    url: string;
+    userId: number;
+  }) {
+    if (args) {
+      this.title = args.title;
+      this.description = args.description;
+      this.image = args.image;
+      this.url = args.url;
+      this.uploadTime = moment().format('YYYY-MM-DD');
+      this.likeNum = 0;
+      this.likes = [];
+      this.dibs = [];
+      this.userId = args.userId;
+    }
+  }
 
   @OneToMany((type) => Like, (likes) => likes.post, {
     nullable: false,
-    onDelete: 'CASCADE',
+    cascade: true,
   })
   likes!: Like[];
 
   @OneToMany((type) => Dib, (dibs) => dibs.post, {
     nullable: false,
-    onDelete: 'CASCADE',
+    cascade: true,
   })
   dibs!: Dib[];
+
+  public addLikes(user: number) {
+    const like = new Like(user);
+    this.likes.push(like);
+  }
+
+  public addDibs(user: number) {
+    const dib = new Dib(user);
+    this.dibs.push(dib);
+  }
+
+  public update(args: PostUpdateType) {
+    const strippedArgs = stripUndefined(args);
+    Object.assign(this, strippedArgs);
+  }
 }
 
 @Entity('likes')
@@ -73,6 +110,9 @@ export class Like {
   @PrimaryGeneratedColumn()
   id!: number;
 
+  constructor(user: number) {
+    this.user = user;
+  }
   @ManyToOne((type) => User, (users) => users.likes, {
     nullable: false,
     onDelete: 'CASCADE',
@@ -83,13 +123,17 @@ export class Like {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  post!: number | Post;
+  post!: never;
 }
 
 @Entity('dibs')
 export class Dib {
   @PrimaryGeneratedColumn()
   id!: number;
+
+  constructor(user: number) {
+    this.user = user;
+  }
 
   @ManyToOne((type) => User, (users) => users.dibs, {
     nullable: false,
@@ -101,5 +145,5 @@ export class Dib {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  post!: number | Post;
+  post!: never;
 }
