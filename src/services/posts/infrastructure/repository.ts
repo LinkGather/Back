@@ -91,8 +91,8 @@ export const getPostRepository = () => {
 
 @EntityRepository(Like)
 class LikeRepository extends AbstractRepository<Like> {
-  findByUserAndPostId(user: number, post: number) {
-    return this.repository.findOne({ user, post });
+  findByUserAndPostId(userId: number, post: number) {
+    return this.repository.findOne({ userId, post });
   }
 
   deleteOne(id: number) {
@@ -110,8 +110,8 @@ export const getLikeRepository = () => {
 
 @EntityRepository(Dib)
 class DibRepository extends AbstractRepository<Dib> {
-  findByUserAndPostId(user: number, post: number) {
-    return this.repository.findOne({ user, post });
+  findByUserAndPostId(userId: number, post: number) {
+    return this.repository.findOne({ userId, post });
   }
 
   deleteOne(id: number) {

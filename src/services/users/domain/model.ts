@@ -1,7 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { Dib } from '../../posts/domain/model';
-import { Like } from '../../posts/domain/model';
-import { Post } from '../../posts/domain/model';
 
 @Entity('users')
 export class User {
@@ -45,16 +42,4 @@ export class User {
       }
     }
   }
-
-  @OneToMany((type) => Like, (likes) => likes.user, {
-    nullable: false,
-    onDelete: 'CASCADE',
-  })
-  likes!: Like[];
-
-  @OneToMany((type) => Dib, (dibs) => dibs.user, {
-    nullable: false,
-    onDelete: 'CASCADE',
-  })
-  dibs!: Dib[];
 }

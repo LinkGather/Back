@@ -8,7 +8,6 @@ import {
   OneToMany,
   Index,
 } from 'typeorm';
-import { User } from '../../users/domain/model';
 
 type PostUpdateType = {
   title?: string;
@@ -89,13 +88,13 @@ export class Post {
   })
   dibs!: Dib[];
 
-  public addLikes(user: number) {
-    const like = new Like(user);
+  public addLikes(userId: number) {
+    const like = new Like(userId);
     this.likes.push(like);
   }
 
-  public addDibs(user: number) {
-    const dib = new Dib(user);
+  public addDibs(userId: number) {
+    const dib = new Dib(userId);
     this.dibs.push(dib);
   }
 
@@ -110,14 +109,12 @@ export class Like {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  constructor(user: number) {
-    this.user = user;
+  @Column()
+  userId!: number;
+
+  constructor(userId: number) {
+    this.userId = userId;
   }
-  @ManyToOne((type) => User, (users) => users.likes, {
-    nullable: false,
-    onDelete: 'CASCADE',
-  })
-  user!: number | User;
 
   @ManyToOne((type) => Post, (posts) => posts.likes, {
     nullable: false,
@@ -131,15 +128,12 @@ export class Dib {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  constructor(user: number) {
-    this.user = user;
-  }
+  @Column()
+  userId!: number;
 
-  @ManyToOne((type) => User, (users) => users.dibs, {
-    nullable: false,
-    onDelete: 'CASCADE',
-  })
-  user!: number | User;
+  constructor(userId: number) {
+    this.userId = userId;
+  }
 
   @ManyToOne((type) => Post, (posts) => posts.dibs, {
     nullable: false,
