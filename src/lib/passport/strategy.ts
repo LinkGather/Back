@@ -22,9 +22,11 @@ export const passportStrategy = () => {
         try {
           console.log('local strategy');
           const exUser = await UserService.dupCheck(email);
-          const validatePw = await bcrypt.compare(password, exUser.password);
-          if (exUser && validatePw) {
-            done(null, exUser);
+          if (exUser) {
+            const validatePw = await bcrypt.compare(password, exUser.password);
+            if (validatePw) {
+              done(null, exUser);
+            }
           } else {
             done(null, false, {
               message: '아이디 및 비밀번호가 일치하지 않습니다.',
