@@ -27,11 +27,10 @@ export const passportStrategy = () => {
             if (validatePw) {
               done(null, exUser);
             }
-          } else {
-            done(null, false, {
-              message: '아이디 및 비밀번호가 일치하지 않습니다.',
-            });
           }
+          done(null, false, {
+            message: '아이디 및 비밀번호가 일치하지 않습니다.',
+          });
         } catch (error) {
           console.error(error);
           done(error);

@@ -4,7 +4,7 @@ import PostService from '../../../../services/posts/application/service';
 
 export default {
   path: '/api/posts/preview',
-  method: 'get',
+  method: 'post',
   pre: auth,
   handler: async (ctx) => {
     const { url } = ctx.request.body;

@@ -8,54 +8,18 @@ import { Like, Post, Dib } from '../domain/model';
 @EntityRepository(Post)
 class PostRepository extends AbstractRepository<Post> {
   //생성
-  save(
-    url: string,
-    title: string,
-    description: string,
-    user: number,
-    image: string,
-    uploadTime: string
-  ) {
-    const post = new Post();
-    post.url = url;
-    post.title = title;
-    post.description = description;
-    post.user = user;
-    post.image = image;
-    post.uploadTime = uploadTime;
-    return this.manager.save(post);
-  }
-
-  //수정
-  async updateOne(
-    url: string,
-    title: string,
-    description: string,
-    image: string,
-    id: number
-  ) {
-    const post = await this.findById(id);
-    post.url = url;
-    post.title = title;
-    post.description = description;
-    post.image = image;
-    return this.manager.save(post);
-  }
-
-  async updateLikeNum(id: number, likeNum: number) {
-    const post = await this.repository.findOneOrFail({ id });
-    post.likeNum = likeNum;
-    return this.manager.save(post);
+  save(post: Post) {
+    return this.manager.save([post]);
   }
 
   //찾기
-  findByUserAndId(user: number, id: number) {
-    return this.repository.findOneOrFail({ user, id });
+  findByUserAndId(userId: number, id: number) {
+    return this.repository.findOne({ userId, id });
   }
   findById(id: number) {
     return this.repository.findOneOrFail({ id });
   }
-  findAll(user: number) {
+  find(user: number) {
     return this.repository
       .createQueryBuilder('posts')
       .leftJoinAndSelect('posts.dibs', 'dibs', 'dibs.userId=:user', { user })
@@ -64,13 +28,11 @@ class PostRepository extends AbstractRepository<Post> {
       .getMany();
   }
   findMyPost(user: number) {
-    return this.repository
-      .createQueryBuilder('posts')
-      .leftJoinAndSelect('posts.dibs', 'dibs', 'dibs.userId=:user', { user })
-      .leftJoinAndSelect('posts.likes', 'likes', 'likes.userId=:user', { user })
-      .orderBy('posts.id', 'DESC')
-      .where({ user })
-      .getMany();
+    return this.repository.find({
+      where: { user },
+      relations: ['dibs', 'likes'],
+      order: { id: 'DESC' },
+    });
   }
   findAllSortLike(user: number) {
     return this.repository
@@ -107,6 +69,20 @@ class PostRepository extends AbstractRepository<Post> {
   deleteOne(id: number) {
     return this.repository.delete({ id });
   }
+
+  //좋아요
+  async like(user: number, id: number) {
+    const post = await this.findById(id);
+    post.addLikes(user);
+    return this.manager.save(post);
+  }
+
+  //찜하기
+  async dib(user: number, id: number) {
+    const post = await this.findById(id);
+    post.addDibs(user);
+    return this.manager.save(post);
+  }
 }
 
 export const getPostRepository = () => {
@@ -115,15 +91,8 @@ export const getPostRepository = () => {
 
 @EntityRepository(Like)
 class LikeRepository extends AbstractRepository<Like> {
-  save(user: number, post: number) {
-    const like = new Like();
-    like.user = user;
-    like.post = post;
-    return this.manager.save(like);
-  }
-
-  findByUserAndPostId(user: number, post: number) {
-    return this.repository.findOneOrFail({ user, post });
+  findByUserAndPostId(userId: number, post: number) {
+    return this.repository.findOne({ userId, post });
   }
 
   deleteOne(id: number) {
@@ -141,15 +110,8 @@ export const getLikeRepository = () => {
 
 @EntityRepository(Dib)
 class DibRepository extends AbstractRepository<Dib> {
-  save(user: number, post: number) {
-    const dib = new Dib();
-    dib.user = user;
-    dib.post = post;
-    return this.manager.save(dib);
-  }
-
-  findByUserAndPostId(user: number, post: number) {
-    return this.repository.findOne({ user, post });
+  findByUserAndPostId(userId: number, post: number) {
+    return this.repository.findOne({ userId, post });
   }
 
   deleteOne(id: number) {
