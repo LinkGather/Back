@@ -74,9 +74,11 @@ class PostService {
     await likeRepository.deleteOne(likeId);
     const likeNum = await likeRepository.countNum(postId);
     const post = await postRepository.findById(postId);
-    post.update({ likeNum });
-    await postRepository.save(post);
-    return likeNum;
+    if (post) {
+      post.update({ likeNum });
+      await postRepository.save(post);
+      return likeNum;
+    }
   };
 
   public like = async (user: number, postId: number) => {
@@ -85,9 +87,11 @@ class PostService {
     await postRepository.like(user, postId);
     const likeNum = await likeRepository.countNum(postId);
     const post = await postRepository.findById(postId);
-    post.update({ likeNum });
-    await postRepository.save(post);
-    return likeNum;
+    if (post) {
+      post.update({ likeNum });
+      await postRepository.save(post);
+      return likeNum;
+    }
   };
 
   //찜

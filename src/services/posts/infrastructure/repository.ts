@@ -17,8 +17,12 @@ class PostRepository extends AbstractRepository<Post> {
     return this.repository.findOne({ userId, id });
   }
   findById(id: number) {
-    return this.repository.findOneOrFail({ id });
+    return this.repository.findOne({
+      where: { id },
+      relations: ['dibs', 'likes'],
+    });
   }
+
   find(user: number) {
     return this.repository
       .createQueryBuilder('posts')
@@ -27,9 +31,9 @@ class PostRepository extends AbstractRepository<Post> {
       .orderBy('posts.id', 'DESC')
       .getMany();
   }
-  findMyPost(user: number) {
+  findMyPost(userId: number) {
     return this.repository.find({
-      where: { user },
+      where: { userId },
       relations: ['dibs', 'likes'],
       order: { id: 'DESC' },
     });
@@ -73,15 +77,19 @@ class PostRepository extends AbstractRepository<Post> {
   //좋아요
   async like(user: number, id: number) {
     const post = await this.findById(id);
-    post.addLikes(user);
-    return this.manager.save(post);
+    if (post) {
+      post.addLikes(user);
+      return this.manager.save(post);
+    }
   }
 
   //찜하기
   async dib(user: number, id: number) {
     const post = await this.findById(id);
-    post.addDibs(user);
-    return this.manager.save(post);
+    if (post) {
+      post.addDibs(user);
+      return this.manager.save(post);
+    }
   }
 }
 
