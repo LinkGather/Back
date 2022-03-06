@@ -26,3 +26,7 @@
 - Backend
   - koa
   - Typescript
+  - DDD
+
+Todo
+-기능추가
