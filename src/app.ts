@@ -13,14 +13,17 @@ const app = new Koa();
 
 dbConnect.connection();
 
-const validOrigins = ['https://linkgather.co.kr','https://www.linkgahter.co.kr']
+const validOrigins = [
+  'https://linkgather.co.kr',
+  'https://www.linkgahter.co.kr',
+];
 
-function verifyOrigin (ctx:Koa.Context){
-    const origin = ctx.header.origin;
-    if (!origin || !validOrigins.includes(origin)){
-        return ctx.throw('not valid')
-    }
-    return origin
+function verifyOrigin(ctx: Koa.Context) {
+  const origin = ctx.header.origin;
+  if (!origin || !validOrigins.includes(origin)) {
+    return ctx.throw('not valid');
+  }
+  return origin;
 }
 
 //error handler
