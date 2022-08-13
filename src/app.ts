@@ -16,6 +16,7 @@ dbConnect.connection();
 const validOrigins = [
   'https://linkgather.co.kr',
   'https://www.linkgahter.co.kr',
+  // 'http://localhost:3000',
 ];
 
 function verifyOrigin(ctx: Koa.Context) {

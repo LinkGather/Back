@@ -11,7 +11,8 @@ export default {
       { session: false, failureRedirect: '/' },
       (err, user) => {
         const token = generateToken(user.id);
-        ctx.redirect(`http://linkgather.co.kr/social/token=${token}`);
+        // ctx.redirect(`http://localhost:3000/social/token=${token}`);
+        ctx.redirect(`https://linkgather.co.kr/social/token=${token}`);
       }
     )(ctx, next);
   },
