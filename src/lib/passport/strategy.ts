@@ -43,7 +43,7 @@ export const passportStrategy = () => {
       {
         clientID: process.env.KAKAO_CLIENT_ID as string,
         clientSecret: process.env.KAKAO_CLIENT_SECRET as string,
-        callbackURL: 'http://linkgather.shop/api/users/kakao/callback',
+        callbackURL: 'https://linkgather.shop/api/users/kakao/callback',
       },
       async (_, __, profile, done) => {
         console.log('kakao strategy');
